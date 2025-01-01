@@ -35,30 +35,28 @@ fashion_labels = [
     "Ankle boot",
 ]
 
-@app.post("/classify/fashion")
-async def classify_fashion(file: UploadFile = File(...)):
+@app.post("/classify/fruit")
+async def classify_fruit(file: UploadFile = File(...)):
     # Read and preprocess the image
     contents = await file.read()
     image = Image.open(io.BytesIO(contents))
-    
-    # Convert to grayscale (if necessary) and then convert to RGB
-    image = image.convert("RGB")  # Convert to RGB (3 channels)
 
-    # Resize the image to the expected size for the model
-    image = image.resize((32, 32))  # Resize to (32, 32) for the fashion model
-    
-    # Normalize the image and convert to numpy array
+    # Convert image to RGB to remove alpha channel (if present)
+    image = image.convert("RGB")
+
+    image = image.resize((32, 32))  # Resize to (32, 32) for fruit model
     image_array = np.array(image) / 255.0  # Normalize the image
     
-    # Reshape the image to (1, 32, 32, 3) to match the model's input shape
+    # Add batch dimension
     image_array = np.expand_dims(image_array, axis=0)
 
     # Make prediction
-    predictions = fashion_model.predict(image_array)
-    predicted_class = fashion_labels[np.argmax(predictions[0])]
+    predictions = fruit_model.predict(image_array)
+    predicted_class = fruit_labels[np.argmax(predictions[0])]
     confidence = float(np.max(predictions[0]))
 
-    return {"type": "fashion", "class": predicted_class, "confidence": confidence}
+    return {"type": "fruit", "class": predicted_class, "confidence": confidence}
+
 
 @app.post("/classify/fashion")
 async def classify_fashion(file: UploadFile = File(...)):
