@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'login.dart';
 import 'signup.dart'; // Import the SignupPage widget
-
+import 'rnn_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => const RegistrationPage(),
         '/login': (context) => const LoginPage(),
         '/home': (context) => const HomePage(),
+         '/rnn': (context) => const RnnPage(),
       },
       // Set the initial route
       initialRoute: '/',
